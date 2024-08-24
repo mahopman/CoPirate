@@ -15,3 +15,4 @@ st.markdown(
 with st.sidebar:
     event = st_file_browser(path="User_Folders", show_preview=False, show_choose_file=True, show_download_file=False, key='B')
     st.write(event)
+
