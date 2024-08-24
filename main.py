@@ -2,8 +2,32 @@
 import anthropic
 import streamlit as st
 import time
+from code_editor import code_editor
+from streamlit_monaco import st_monaco
+import io
+import sys
+import traceback
 
-st.title("Coding Assistant")
+st.title("Tic-tac-toe homework")
+
+
+mockTextFile = open("ticTacToeAssignment.txt")
+mockText = mockTextFile.read()
+content = st_monaco(value=mockText, height="400px", language="python", theme="vs-dark")
+
+if st.button("RUN"):
+    #st.write(content)
+    buffer = io.StringIO()
+    sys.stdout = buffer
+    try:
+        exec(content)
+        output = buffer.getvalue()
+    except Exception as e:
+        output = traceback.format_exc()
+    finally:
+        sys.stdout = sys.__stdout__
+    st.text(output)
+    print(output)
 
 #client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 client = anthropic.Client(api_key=st.secrets["ANTHROPIC_API_KEY"])
