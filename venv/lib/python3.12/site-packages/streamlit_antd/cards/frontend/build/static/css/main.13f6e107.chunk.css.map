@@ -1,0 +1,1 @@
+{"version":3,"sources":["App.css"],"names":[],"mappings":"AAEA,qBACE,wBACF","file":"main.13f6e107.chunk.css","sourcesContent":["@import '~antd/dist/antd.css';\n\n.ant-card-meta-title {\n  white-space: break-spaces;\n}\n"]}

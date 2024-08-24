@@ -1,0 +1,1 @@
+{"version":3,"sources":["App.css"],"names":[],"mappings":"AAEA,2BACI,kBACJ,CACA,4BACI,yBAA2B,CAC3B,kBACJ","file":"main.22ab991f.chunk.css","sourcesContent":["@import '~antd/dist/antd.css';\n\n.ant-steps-item:last-child {\n    flex: 1 !important;\n}\n.ant-steps-item-description {\n    max-width: unset !important;\n    padding-right: 3rem;\n}\n"]}
