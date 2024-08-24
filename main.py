@@ -1,7 +1,6 @@
 #from openai import OpenAI
 import anthropic
 import streamlit as st
-from streamlit_push_notifications import send_alert, send_push
 import time
 
 st.title("Coding Assistant")
