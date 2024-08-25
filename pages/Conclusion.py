@@ -1,5 +1,7 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
+from streamlit_js_eval import streamlit_js_eval
+
 
 if not st.session_state.malicious_code:
     st.session_state.malicious_code = """# Example of malicious code
@@ -11,6 +13,12 @@ st.set_page_config(
     page_title="Conclusion",
     page_icon="👋",
 )
+
+if hasattr(st.session_state,"timer_end_time"):
+    streamlit_js_eval(js_expressions="parent.window.location.reload()")
+
+
+st.write("Conclusion")
 
 st.markdown(
     """
@@ -52,5 +60,11 @@ st.markdown(
     """
 )
 
+
+if hasattr(st.session_state,"timer_end_time"):
+    streamlit_js_eval(js_expressions="parent.window.location.reload()")
+
 if st.button("Play Again?"):
     switch_page('main')
+
+    

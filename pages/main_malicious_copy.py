@@ -30,9 +30,13 @@ left_col, center_col, right_col = st.columns([3,3,1])
 
 with left_col:
     st.header("Code editor")
-    content = st_monaco(value="", height="400px", language="python", theme="vs-dark")
+    content = st_monaco(value=st.session_state.content, height="400px", language="python", theme="vs-dark")
 
 with center_col:
+    st.markdown('''
+                #### Malicious code was subtly inserted into the code the AI assistant suggested. Look for code that deletes files 
+                '''
+                )
     if st.button("What just happened?"):
         switch_page('Conclusion')
 
