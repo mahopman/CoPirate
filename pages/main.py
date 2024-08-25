@@ -64,22 +64,19 @@ with left_col:
         # Display confirmation prompt if needed
         if st.session_state.confirm_submission:
             st.warning("Do you want to submit your homework?")
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("Yes, submit"):
-                    st.session_state.confirm_submission = False
-                    malicious_code = extract_malicious_code(client, content)
-                    if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
-                        st.text("You submitted malicious code! " + malicious_code)
+            if st.button("Yes, submit"):
+                st.session_state.confirm_submission = False
+                malicious_code = extract_malicious_code(client, content)
+                if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+                    st.text("You submitted malicious code! " + malicious_code)
+                else:
+                    passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+                    if passes:
+                        st.text("You submitted on time with all tests passing!")
                     else:
-                        passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
-                        if passes:
-                            st.text("You submitted on time with all tests passing!")
-                        else:
-                            st.text("Your submitted code didn't pass all the tests. :(")
-            with col2:
-                if st.button("Cancel"):
-                    st.session_state.confirm_submission = False
+                        st.text("Your submitted code didn't pass all the tests. :(")
+            if st.button("Cancel"):
+                st.session_state.confirm_submission = False
 
 if "anthropic_model" not in st.session_state:
     st.session_state["anthropic_model"] = "claude-1.3"
