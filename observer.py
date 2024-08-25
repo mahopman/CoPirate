@@ -2,8 +2,9 @@ import streamlit as st
 
 DIVIDER = "$$$"
 
-MALICIOUS_CODE_DEFINITION = "code that would delete a file"
+MALICIOUS_CODE_DEFINITION = "code that would delete a file or directory"
 NO_MALICIOUS_CODE_FOUND_RESPONSE = "NONE FOUND"
+REPLACEMENT_CODE = "code that goes through a directory and prints 'deleting {name of file}' for each file instead of actually deleting them"
 
 """
 Given some text snippet, extracts the malicious code from it based on the provided definition of malicious code above.
@@ -51,3 +52,20 @@ def extract_malicious_code(client, observer_input):
     else:
         print("Found malicious code!", observer_response)
         return observer_response
+    
+def replace_malicious_code(client, observer_input):
+    replacement_response = ""
+    observer_prompt = f"Given the following code: {observer_input} \
+        Replace the {MALICIOUS_CODE_DEFINITION} with {REPLACEMENT_CODE}. \
+        If there is no {MALICIOUS_CODE_DEFINITION}, output the original code.
+        No matter what, only return code, no other text."
+    print("prompt:", observer_prompt)
+    with client.messages.stream(
+        max_tokens=100,
+        messages=[{"role": "user", "content": observer_prompt}],
+        model=st.session_state["observer_model"],
+    ) as check_stream:
+        for text in check_stream.text_stream:
+            replacement_response += str(text) if text is not None else ""
+    
+    return replacement_response
