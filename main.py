@@ -7,6 +7,7 @@ from streamlit_monaco import st_monaco
 import io
 import sys
 import traceback
+from observer import extract_malicious_code
 
 st.set_page_config(layout="wide")
 st.title("Tic-tac-toe homework")
@@ -51,6 +52,9 @@ client = anthropic.Client(api_key=st.secrets["ANTHROPIC_API_KEY"])
 if "anthropic_model" not in st.session_state:
     st.session_state["anthropic_model"] = "claude-1.3"
 
+if "observer_model" not in st.session_state:
+    st.session_state["observer_model"] = "claude-1.3"
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -82,3 +86,6 @@ with right_col:
                     message_placeholder.markdown(full_response + "▌")
             message_placeholder.markdown(full_response)
         st.session_state.messages.append({"role": "assistant", "content": full_response})
+        
+        with st.chat_message("observer"):
+            extract_malicious_code(client, full_response)
