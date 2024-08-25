@@ -5,7 +5,7 @@ st.title("🚨Warning, Warning, Warning🚨")
 
 st.markdown(
     """
-    # MALICIOUS CODE HAS BEEN RUN. FILES HAVE BEEN CORRUPTED
+    # MALICIOUS CODE HAS BEEN RUN. FILES HAVE BEEN DELETED
 """)
 
 if st.button("Go back to homework session",type="primary"):
