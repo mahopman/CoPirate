@@ -2,17 +2,33 @@
 import anthropic
 import streamlit as st
 import time
-from code_editor import code_editor
 from streamlit_monaco import st_monaco
 import io
 import sys
 import traceback
 import streamlit_shadcn_ui as ui
 from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
+from streamlit_file_browser import st_file_browser
 
 
 st.set_page_config(layout="wide")
 st.title("Tic-tac-toe homework")
+
+st.markdown(
+    """
+    <style>
+        section[data-testid="stSidebar"] {
+            width: 400px !important; # Set the width to your desired value
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+with st.sidebar:
+    event = st_file_browser(path="User_Folders", show_preview=True, show_choose_file=False, show_download_file=False, key='B')
+    st.write(event)
+
 
 mockTextFile = open("ticTacToeAssignment.txt")
 mockText = mockTextFile.read()

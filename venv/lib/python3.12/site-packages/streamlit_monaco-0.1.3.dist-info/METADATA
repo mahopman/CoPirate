@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: streamlit-monaco
+Version: 0.1.3
+Summary: Monaco Editor (Visual Studio Code) for Streamlit
+Home-page: https://github.com/marcusschiesser/streamlit-monaco
+Author: marcusschiesser
+License: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: streamlit >=1.20
+
+# 📝 Streamlit Monaco &nbsp; [![GitHub][github_badge]][github_link] [![PyPI][pypi_badge]][pypi_link]
+
+Monaco Editor (Visual Studio Code) for Streamlit
+
+## Installation
+
+```sh
+pip install streamlit-monaco
+```
+
+## Getting started
+
+```python
+from streamlit_monaco import st_monaco
+import streamlit as st
+
+st.title("Streamlit Markdown Editor")
+
+content = st_monaco(value="# Hello world", height="600px", language="markdown")
+
+if st.button("Show editor's content"):
+    st.write(content)
+```
+
+[github_badge]: https://badgen.net/badge/icon/GitHub?icon=github&color=black&label
+[github_link]: https://github.com/marcusschiesser/streamlit-monaco
+[pypi_badge]: https://badgen.net/pypi/v/streamlit-monaco?icon=pypi&color=black&label
+[pypi_link]: https://pypi.org/project/streamlit-monaco
