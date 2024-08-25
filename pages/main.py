@@ -10,6 +10,7 @@ import traceback
 import streamlit_shadcn_ui as ui
 from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 from streamlit_file_browser import st_file_browser
+from streamlit_extras.switch_page_button import switch_page
 
 
 st.set_page_config(layout="wide")
@@ -166,6 +167,7 @@ with right_col:
             remaining_time = int(end_time - current_time)
         
             if remaining_time <= 0:
+                switch_page('time_up')    
                 # This is where the functionality of the pop up that gives an option to re-try should be
                 timer_placeholder.markdown(f"<div class='timer-label'><span class='time-remaining'>Time's up!</span></div>", unsafe_allow_html=True)
                 break

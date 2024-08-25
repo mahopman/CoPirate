@@ -1,8 +1,6 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
-#st.set_page_config(layout="wide")
-
 st.title("👾 Welcome to our AI Capabilities Demo! 👾")
 
 st.markdown(
