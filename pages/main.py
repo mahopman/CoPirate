@@ -59,6 +59,7 @@ with left_col:
         malicious_code = extract_malicious_code(client, content)
         if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
             # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
+            switch_page('malicious_code_ran')
             st.text("You submitted malicious code! " + malicious_code)
         else:
             passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
