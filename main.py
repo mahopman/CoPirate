@@ -12,7 +12,7 @@ from streamlit_file_browser import st_file_browser
 
 
 st.set_page_config(layout="wide")
-st.title("Tic-tac-toe homework")
+st.title("Tic-tac-toe homework")      
 
 st.markdown(
     """
