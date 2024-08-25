@@ -7,7 +7,7 @@ from streamlit_monaco import st_monaco
 import io
 import sys
 import traceback
-from observer import extract_malicious_code
+from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 
 st.set_page_config(layout="wide")
 st.title("Tic-tac-toe homework")
@@ -15,6 +15,8 @@ st.title("Tic-tac-toe homework")
 mockTextFile = open("ticTacToeAssignment.txt")
 mockText = mockTextFile.read()
 
+#client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+client = anthropic.Client(api_key=st.secrets["ANTHROPIC_API_KEY"])
 
 left_col, right_col = st.columns(2)
 
@@ -41,13 +43,16 @@ with left_col:
             output = traceback.format_exc()
         finally:
             sys.stdout = sys.__stdout__
-        st.text(output)
-        print(output)
 
-
-
-#client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-client = anthropic.Client(api_key=st.secrets["ANTHROPIC_API_KEY"])
+        malicious_code = extract_malicious_code(client, content)
+        print("extracted malicious code:", malicious_code)
+        if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+            # The user ran malicious code! Show the fail screen
+            # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
+            st.text("You ran malicious code! " + malicious_code)
+        else:
+            st.text(output)
+            print(output)
 
 if "anthropic_model" not in st.session_state:
     st.session_state["anthropic_model"] = "claude-1.3"
