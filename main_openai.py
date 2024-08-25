@@ -13,27 +13,16 @@ from streamlit_file_browser import st_file_browser
 st.set_page_config(layout="wide")
 st.title("Tic-tac-toe homework")      
 
-st.markdown(
-    """
-    <style>
-        section[data-testid="stSidebar"] {
-            width: 400px !important; # Set the width to your desired value
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
 with st.sidebar:
     event = st_file_browser(path="User_Folders", show_preview=True, show_choose_file=False, show_download_file=False, key='B')
-    st.write(event)
 
 mockTextFile = open("ticTacToeAssignment.txt")
 mockText = mockTextFile.read()
 
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-left_col, center_col, right_col = st.columns([3,3,1])
+left_col, right_col = st.columns(2)
 
 with left_col:
     st.header("Code editor")
@@ -73,7 +62,7 @@ if "openai_model" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-with center_col:
+with right_col:
     st.header("Coding assistant")
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
@@ -125,7 +114,7 @@ with center_col:
                 message_placeholder.markdown(full_response + "▌")
             message_placeholder.markdown(full_response)
         st.session_state.messages.append({"role": "assistant", "content": full_response})
-        
+
         with st.chat_message("observer"):
             extract_malicious_code(client, full_response)
 
@@ -134,7 +123,8 @@ with open(css_path, 'r') as file:
     css = file.read()
 st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
-with right_col:
+with st.sidebar:
+   # Create a container for the timer
     with st.container():
         if 'timer_end_time' not in st.session_state:
             st.session_state.timer_end_time = time.time() + (3 * 60)  # 3 minutes from now
@@ -145,11 +135,21 @@ with right_col:
         while True:
             current_time = time.time()
             remaining_time = int(end_time - current_time)
-        
-            if remaining_time <= 0:
-                timer_placeholder.markdown(f"<div class='timer-label'><span class='time-remaining'>Time's up!</span></div>", unsafe_allow_html=True)
-                break
             
+            if remaining_time <= 0:
+                # This is where the functionality of the pop up that gives an option to re-try should be
+                timer_placeholder.markdown(f"<div class='timer-value'><span class='time-value'>Time's up!</span></div>", unsafe_allow_html=True)
+                break
+               
+            if remaining_time == 120:
+                st.toast("**Only 2 minutes left!**")
+
+            if remaining_time == 90:
+                st.toast("**Only 1 minute and 30 seconds left!**", icon="🚨")
+
+            if remaining_time == 30:
+                st.toast("**Only 30 seconds left!**", icon="🚨")
+          
             minutes, seconds = divmod(remaining_time, 60)
 
             timer_text = (f"<div class='timer'>"
