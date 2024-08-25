@@ -47,8 +47,6 @@ with left_col:
 
     if st.button("RUN"):
         #st.write(content)
-        buffer = io.StringIO()
-        sys.stdout = buffer
         malicious_code = extract_malicious_code(client, content)
         if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
             # The user ran malicious code! Show the fail screen
@@ -59,7 +57,8 @@ with left_col:
             time.sleep(5)
             st.text("You ran malicious code!!! " + malicious_code)
         else: 
-
+            buffer = io.StringIO()
+            sys.stdout = buffer
             try:
                 exec(content)
                 output = buffer.getvalue()
@@ -68,7 +67,7 @@ with left_col:
             finally:
                 sys.stdout = sys.__stdout__
                 st.text(output)
-                #print(output)
+                print(output)
 
     trigger_btn = ui.button(text="Submit", key="trigger_btn")
     confirmed = ui.alert_dialog(show=trigger_btn, title="Submit Homework", description="Do you want to submit your homework?", confirm_label="Submit", cancel_label="Cancel", key="alert_dialog1")
