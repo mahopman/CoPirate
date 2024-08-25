@@ -11,12 +11,6 @@ import streamlit_shadcn_ui as ui
 from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 
 
-def load_css(file_path):
-    """Load CSS from a file."""
-    with open(file_path, "r") as file:
-        return file.read()
-
-
 st.set_page_config(layout="wide")
 st.title("Tic-tac-toe homework")
 
@@ -26,10 +20,10 @@ mockText = mockTextFile.read()
 #client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 client = anthropic.Client(api_key=st.secrets["ANTHROPIC_API_KEY"])
 
-left_col_upper, right_col_upper = st.columns(2)
+left_col, center_col, right_col = st.columns([3,3,1])
 
 
-with left_col_upper:
+with left_col:
     st.header("Code editor")
     content = st_monaco(value=mockText, height="400px", language="python", theme="vs-dark")
 
@@ -76,7 +70,7 @@ if "observer_model" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-with right_col_upper:
+with center_col:
     st.header("Coding assistant")
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
@@ -109,45 +103,35 @@ with right_col_upper:
             extract_malicious_code(client, full_response)
 
 
-# Setting the timer to be 3 minutes
-TOTAL_DURATION = 3*60
-if 'start_time' not in st.session_state:
-    st.session_state.start_time = time.time()
-    st.session_state.remaining_time = TOTAL_DURATION
-
-elapsed_time = time.time() - st.session_state.start_time
-st.session_state.remaining_time = max(TOTAL_DURATION - elapsed_time, 0)
-mm, ss = divmod(int(st.session_state.remaining_time), 60)
-
-left_col_lower, right_col_lower = st.columns([4, 1])  # Adjust column widths as needed
 
 css_path = "./css/styles.css"
-css = load_css(css_path)
+with open(css_path, 'r') as file:
+    css = file.read()
 st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
-    
-    
-with left_col_lower:
+
+with right_col:
     # Create a container for the timer
     with st.container():
-        timer_text = f"{mm:02d}:{ss:02d}"
-        st.markdown(f'<p class="timer-label">Time left: <span class="timer-value">{timer_text}</span></p>', unsafe_allow_html=True)
-     
-        # Display a message when the timer runs out
-        if st.session_state.remaining_time <= 0:
-            # This is where the code for the pop-up should be
-            st.write("Time's up!")
-            st.write("The countdown has finished.")
-# Refresh the timer every second
-if st.session_state.remaining_time > 0:
-    time.sleep(1)
-    st.rerun()
+        if 'timer_end_time' not in st.session_state:
+            st.session_state.timer_end_time = time.time() + (3 * 60)  # 3 minutes from now
 
+        end_time = st.session_state.timer_end_time
+        timer_placeholder = st.empty()  # Create an empty placeholder
+    
+        while True:
+            current_time = time.time()
+            remaining_time = int(end_time - current_time)
+        
+            if remaining_time <= 0:
+                # This is where the functionality of the pop up that gives an option to re-try should be
+                timer_placeholder.markdown(f"<div class='timer-label'><span class='time-remaining'>Time's up!</span></div>", unsafe_allow_html=True)
+                break
+            
+            minutes, seconds = divmod(remaining_time, 60)
 
-# what could be added if trying to fix 'hello world'
-# st.header("Timer")
-# ph = st.empty()
-# N = 3*60
-# for secs in range(N,0,-1):
-#     mm, ss = secs//60, secs%60
-#     ph.metric("Time left", f"{mm:02d}:{ss:02d}")
-#     time.sleep(1)
+            timer_text = (f"<div class='timer'>"
+                        f"<span class='timer-label'>Timer: </span>"
+                        f"<span class='timer-value'>{minutes:02}:{seconds:02}</span>"
+                        f"</div>")
+            timer_placeholder.markdown(timer_text, unsafe_allow_html=True)
+            time.sleep(1)
