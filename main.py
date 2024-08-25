@@ -7,6 +7,7 @@ from streamlit_monaco import st_monaco
 import io
 import sys
 import traceback
+import streamlit_shadcn_ui as ui
 from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 
 st.set_page_config(layout="wide")
@@ -45,7 +46,6 @@ with left_col:
             sys.stdout = sys.__stdout__
 
         malicious_code = extract_malicious_code(client, content)
-        print("extracted malicious code:", malicious_code)
         if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
             # The user ran malicious code! Show the fail screen
             # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
@@ -53,6 +53,19 @@ with left_col:
         else:
             st.text(output)
             print(output)
+
+    trigger_btn = ui.button(text="Submit", key="trigger_btn")
+    confirmed = ui.alert_dialog(show=trigger_btn, title="Submit Homework", description="Do you want to submit your homework?", confirm_label="Submit", cancel_label="Cancel", key="alert_dialog1")
+    if confirmed:
+        malicious_code = extract_malicious_code(client, content)
+        if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+            # The user submitted malicious code! Show the fail screen
+            # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
+            st.text("You submitted malicious code! " + malicious_code)
+        else:
+            # TODO: Check that they actually did the assignment
+            # Show the win screen.
+            st.text("You submitted on time!")
 
 if "anthropic_model" not in st.session_state:
     st.session_state["anthropic_model"] = "claude-1.3"
