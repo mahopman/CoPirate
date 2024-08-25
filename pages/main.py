@@ -47,6 +47,7 @@ with left_col:
             st.session_state.run_pressed = True
             malicious_code = extract_malicious_code(client, content)
             if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+                st.session_state.content = content
                 switch_page('malicious_code_ran')
             # The user ran malicious code! Show the fail screen
                 folders = os.listdir("./User_Folders")
@@ -72,13 +73,16 @@ with left_col:
                 st.session_state.confirm_submission = False
                 malicious_code = extract_malicious_code(client, content)
                 if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+                    st.session_state.content = content
+                    switch_page('malicious_code_ran')
                     st.text("You submitted malicious code! " + malicious_code)
                 else:
                     passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
                     if passes:
+                        switch_page('success')
                         st.text("You submitted on time with all tests passing!")
                     else:
-                        st.text("Your submitted code didn't pass all the tests. :(")
+                        st.text("Your submitted code didn't pass all the tests. :( Try Again")
             if st.button("Cancel"):
                 st.session_state.confirm_submission = False
 
