@@ -74,7 +74,6 @@ with left_col:
     if confirmed:
         malicious_code = extract_malicious_code(client, content)
         if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
-            # The user submitted malicious code! Show the fail screen
             # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
             st.text("You submitted malicious code! " + malicious_code)
         else:
