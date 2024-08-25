@@ -1,6 +1,5 @@
 import streamlit as st
 from streamlit_file_browser import st_file_browser
-import streamlit_shadcn_ui as ui
 
 st.markdown(
     """
