@@ -1,0 +1,11 @@
+.timer-label {
+    color: #000000bb; /* Black color for the label */
+    font-size: 34px; /* Adjust font size as needed */
+    font-weight: bold; /* Optional: Make the label bold */
+}
+
+.timer-value {
+    color: #FF0000; /* Bright red color for the timer */
+    font-size: 34px; /* Adjust font size as needed */
+    font-weight: bold; /* Optional: Make the timer bold */
+}
