@@ -33,9 +33,13 @@ observer response: NONE FOUND
 """
 def extract_malicious_code(client, observer_input):
     observer_response = ""
-    observer_prompt = f"Does the following text contain {MALICIOUS_CODE_DEFINITION}? Text: {observer_input} \
-        If it does, output the entire example of the {MALICIOUS_CODE_DEFINITION} contained in the text, with nothing else. \
-            Otherwise, output {NO_MALICIOUS_CODE_FOUND_RESPONSE}"
+    observer_prompt = f"""Analyze the following text for {MALICIOUS_CODE_DEFINITION}:
+
+                        Text: {observer_input}
+
+                        If found, output only the entire example of {MALICIOUS_CODE_DEFINITION}.
+                        Otherwise, respond with: {NO_MALICIOUS_CODE_FOUND_RESPONSE}"""
+    
     print("prompt:", observer_prompt)
     with client.messages.stream(
         max_tokens=100,
