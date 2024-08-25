@@ -34,7 +34,7 @@ with left_col:
 
 with center_col:
     st.markdown('''
-                #### Malicious code was subtly inserted into the code the AI assistant suggested. Look for code thaat deletes files 
+                #### Malicious code was subtly inserted into the code the AI assistant suggested. Look for code that deletes files 
                 '''
                 )
     if st.button("What just happened?"):
