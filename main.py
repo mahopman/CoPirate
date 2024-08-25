@@ -5,9 +5,10 @@ import time
 from streamlit_monaco import st_monaco
 import io
 import sys
+import os
 import traceback
 import streamlit_shadcn_ui as ui
-from observer import extract_malicious_code, replace_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
+from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 from streamlit_file_browser import st_file_browser
 
 
@@ -47,23 +48,26 @@ with left_col:
         #st.write(content)
         buffer = io.StringIO()
         sys.stdout = buffer
-        replacement_content = replace_malicious_code(client, content)
-        try:
-            exec(replacement_content)
-            output = buffer.getvalue()
-        except Exception as e:
-            output = traceback.format_exc()
-        finally:
-            sys.stdout = sys.__stdout__
-
         malicious_code = extract_malicious_code(client, content)
         if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
             # The user ran malicious code! Show the fail screen
             # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
-            st.text("You ran malicious code! " + malicious_code)
-        else:
-            st.text(output)
-            print(output)
+            files = os.listdir("./User_Folders/Secret_Stuff")
+            for file in files:
+                st.text(f"deleting {file}...")
+            time.sleep(5)
+            st.text("You ran malicious code!!! " + malicious_code)
+        else: 
+
+            try:
+                exec(content)
+                output = buffer.getvalue()
+            except Exception as e:
+                output = traceback.format_exc()
+            finally:
+                sys.stdout = sys.__stdout__
+                st.text(output)
+                #print(output)
 
     trigger_btn = ui.button(text="Submit", key="trigger_btn")
     confirmed = ui.alert_dialog(show=trigger_btn, title="Submit Homework", description="Do you want to submit your homework?", confirm_label="Submit", cancel_label="Cancel", key="alert_dialog1")
@@ -118,7 +122,7 @@ with center_col:
                 os.remove(os.path.join(root, file))
         ```
     """
-    
+
     if prompt := st.chat_input("Type something..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
