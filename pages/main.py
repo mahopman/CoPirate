@@ -163,6 +163,7 @@ with st.sidebar:
             remaining_time = int(end_time - current_time)
         
             if remaining_time <= 0:
+                time_up='Yes'
                 switch_page('time_up')    
                 # This is where the functionality of the pop up that gives an option to re-try should be
                 timer_placeholder.markdown(f"<div class='timer-value'><span class='time-value'>Time's up!</span></div>", unsafe_allow_html=True)
