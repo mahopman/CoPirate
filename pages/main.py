@@ -3,14 +3,12 @@ import anthropic
 import streamlit as st
 import time
 from streamlit_monaco import st_monaco
-import io
-import sys
 import os
-import traceback
 import streamlit_shadcn_ui as ui
 from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 from streamlit_file_browser import st_file_browser
 from streamlit_extras.switch_page_button import switch_page
+from grader import grade_assignment, HomeworkType
 
 
 st.set_page_config(layout="wide")
@@ -20,7 +18,7 @@ st.title("Tic-tac-toe homework")
 with st.sidebar:
     event = st_file_browser(path="User_Folders", show_preview=True, show_choose_file=False, show_download_file=False, key='B')
 
-mockTextFile = open("ticTacToeAssignment.txt")
+mockTextFile = open("ticTacToeAssignment.py")
 mockText = mockTextFile.read()
 
 #client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -45,17 +43,8 @@ with left_col:
             time.sleep(5)
             st.text("You ran malicious code!!! " + malicious_code)
         else: 
-            buffer = io.StringIO()
-            sys.stdout = buffer
-            try:
-                exec(content)
-                output = buffer.getvalue()
-            except Exception as e:
-                output = traceback.format_exc()
-            finally:
-                sys.stdout = sys.__stdout__
-                st.text(output)
-                print(output)
+            passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+            st.text(test_results)
 
     trigger_btn = ui.button(text="Submit", key="trigger_btn")
     confirmed = ui.alert_dialog(show=trigger_btn, title="Submit Homework", description="Do you want to submit your homework?", confirm_label="Submit", cancel_label="Cancel", key="alert_dialog1")
@@ -65,9 +54,11 @@ with left_col:
             # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
             st.text("You submitted malicious code! " + malicious_code)
         else:
-            # TODO: Check that they actually did the assignment
-            # Show the win screen.
-            st.text("You submitted on time!")
+            passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+            if passes:
+                st.text("You submitted on time with all tests passing!")
+            else:
+                st.text("Your submitted code didn't pass all the tests. :(")
 
 if "anthropic_model" not in st.session_state:
     st.session_state["anthropic_model"] = "claude-1.3"
