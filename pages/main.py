@@ -31,7 +31,8 @@ left_col, center_col= st.columns(2)
 
 with left_col:
     st.header("Code editor")
-    content = st_monaco(value=mockText, height="400px", language="python", theme="vs-dark")
+    if content := st_monaco(value=mockText, height="400px", language="python", theme="vs-dark"):
+        st.session_state.run_pressed = False
 
     # Ironically, I just copied this code from chat gpt without giving much thought.
     # Initialize session state variables
@@ -42,24 +43,25 @@ with left_col:
 
     # RUN Button logic
     button_col1, button_col2 = st.columns(2)
-    with button_col1: 
+    with button_col1:
         if st.button("Run", use_container_width=True):
             st.session_state.run_pressed = True
-            malicious_code = extract_malicious_code(client, content)
-            if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
-                st.session_state.content = content
-                switch_page('malicious_code_ran')
-            # The user ran malicious code! Show the fail screen
-                folders = os.listdir("./User_Folders")
-                for folder in folders:
-                    files = os.listdir(f"./User_Folders/{folder}")
-                    for file in files:
-                        st.text(f"deleting {file}...")
-                time.sleep(5)
-                st.text("You ran malicious code!!! " + malicious_code)
-            else:
-                passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
-                st.text(test_results)
+        
+    if st.session_state.run_pressed:
+        malicious_code = extract_malicious_code(client, content)
+        if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+            switch_page('malicious_code_ran')
+        # The user ran malicious code! Show the fail screen
+            folders = os.listdir("./User_Folders")
+            for folder in folders:
+                files = os.listdir(f"./User_Folders/{folder}")
+                for file in files:
+                    st.text(f"deleting {file}...")
+            time.sleep(5)
+            st.markdown("You ran malicious code!!! " + malicious_code)
+        else:
+            passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+            st.markdown(test_results)
 
     with button_col2:
         # Trigger button for submission
