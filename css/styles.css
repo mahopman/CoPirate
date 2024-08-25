@@ -1,11 +1,27 @@
 .timer-label {
-    color: #000000bb; /* Black color for the label */
-    font-size: 34px; /* Adjust font size as needed */
-    font-weight: bold; /* Optional: Make the label bold */
+    color: #000000bb;
+    /* Black color for the label */
+    font-size: 34px;
+    /* Adjust font size as needed */
+    font-weight: bold;
+    /* Optional: Make the label bold */
 }
 
 .timer-value {
-    color: #FF0000; /* Bright red color for the timer */
-    font-size: 34px; /* Adjust font size as needed */
-    font-weight: bold; /* Optional: Make the timer bold */
+    color: #FF0000;
+    /* Bright red color for the timer */
+    font-size: 34px;
+    /* Adjust font size as needed */
+    font-weight: bold;
+    /* Optional: Make the timer bold */
+}
+
+div[data-testid=stToast] {
+    padding: 10px 10px 20px 10px;
+    background-color: #ee942d;
+    width: 20%;
+}
+
+section[data-testid=stSidebar] {
+    width: 400px !important;
 }

@@ -16,21 +16,9 @@ from streamlit_extras.switch_page_button import switch_page
 st.set_page_config(layout="wide")
 st.title("Tic-tac-toe homework")      
 
-st.markdown(
-    """
-    <style>
-        section[data-testid="stSidebar"] {
-            width: 400px !important; # Set the width to your desired value
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
+# Changes to sidebar width can be done by editing styles.css
 with st.sidebar:
     event = st_file_browser(path="User_Folders", show_preview=True, show_choose_file=False, show_download_file=False, key='B')
-    st.write(event)
-
 
 mockTextFile = open("ticTacToeAssignment.txt")
 mockText = mockTextFile.read()
@@ -38,7 +26,7 @@ mockText = mockTextFile.read()
 #client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 client = anthropic.Client(api_key=st.secrets["ANTHROPIC_API_KEY"])
 
-left_col, center_col, right_col = st.columns([3,3,1])
+left_col, center_col= st.columns(2)
 
 
 with left_col:
@@ -152,7 +140,7 @@ with open(css_path, 'r') as file:
     css = file.read()
 st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
-with right_col:
+with st.sidebar:
     # Create a container for the timer
     with st.container():
         if 'timer_end_time' not in st.session_state:
@@ -168,8 +156,18 @@ with right_col:
             if remaining_time <= 0:
                 switch_page('time_up')    
                 # This is where the functionality of the pop up that gives an option to re-try should be
-                timer_placeholder.markdown(f"<div class='timer-label'><span class='time-remaining'>Time's up!</span></div>", unsafe_allow_html=True)
+                timer_placeholder.markdown(f"<div class='timer-value'><span class='time-value'>Time's up!</span></div>", unsafe_allow_html=True)
                 break
+            
+            if remaining_time == 120:
+                st.toast("**Only 2 minutes left!**")
+            
+            if remaining_time == 90:
+                st.toast("**Only 1 minute and 30 seconds left!**", icon="🚨")
+                
+            if remaining_time == 30:
+                st.toast("**Only 30 seconds left!**", icon="🚨")
+
             
             minutes, seconds = divmod(remaining_time, 60)
 
