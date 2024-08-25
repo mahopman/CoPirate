@@ -1,0 +1,71 @@
+Metadata-Version: 2.1
+Name: streamlit-modal
+Version: 0.1.2
+Summary: Modal for streamlit
+Home-page: https://github.com/teamtv/streamlit_modal
+Author: Koen Vossen
+Author-email: info@koenvossen.nl
+License: BSD
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: License :: OSI Approved
+Classifier: Topic :: Scientific/Engineering
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: streamlit
+Requires-Dist: deprecation
+
+# Streamlit modal
+
+Modal support for streamlit. The hackish way.
+
+## Example
+
+```python
+import streamlit as st
+from streamlit_modal import Modal
+
+import streamlit.components.v1 as components
+
+
+modal = Modal(
+    "Demo Modal", 
+    key="demo-modal",
+    
+    # Optional
+    padding=20,    # default value
+    max_width=744  # default value
+)
+open_modal = st.button("Open")
+if open_modal:
+    modal.open()
+
+if modal.is_open():
+    with modal.container():
+        st.write("Text goes here")
+
+        html_string = '''
+        <h1>HTML string in RED</h1>
+
+        <script language="javascript">
+          document.querySelector("h1").style.color = "red";
+        </script>
+        '''
+        components.html(html_string)
+
+        st.write("Some fancy text")
+        value = st.checkbox("Check me")
+        st.write(f"Checkbox checked: {value}")
+```
+
+## Install
+
+```shell script
+pip install streamlit-modal
+```
