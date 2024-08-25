@@ -39,36 +39,47 @@ with left_col:
         st.session_state.confirm_submission = False
 
     # RUN Button logic
-    if st.button("RUN"):
-        st.session_state.run_pressed = True
-        malicious_code = extract_malicious_code(client, content)
-        if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
-            switch_page('malicious_code_ran')
+    button_col1, button_col2 = st.columns(2)
+    with button_col1: 
+        if st.button("Run", use_container_width=True):
+            st.session_state.run_pressed = True
+            malicious_code = extract_malicious_code(client, content)
+            if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+                switch_page('malicious_code_ran')
             # The user ran malicious code! Show the fail screen
-            files = os.listdir("./User_Folders/Secret_Stuff")
-            for file in files:
-                st.text(f"deleting {file}...")
-            time.sleep(5)
-            st.text("You ran malicious code!!! " + malicious_code)
-        else:
-            passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
-            st.text(test_results)
-
-    trigger_btn = ui.button(text="Submit", key="trigger_btn")
-    confirmed = ui.alert_dialog(show=trigger_btn, title="Submit Homework", description="Do you want to submit your homework?", confirm_label="Submit", cancel_label="Cancel", key="alert_dialog1")
-    if confirmed:
-        malicious_code = extract_malicious_code(client, content)
-        if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
-            # NOTE: Right now the checking above doesn't always work. You may need to delete everything but the "malicious" code for testing
-            switch_page('malicious_code_ran')
-            st.text("You submitted malicious code! " + malicious_code)
-        else:
-            passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
-            if passes:
-                switch_page('success')
-                st.text("You submitted on time with all tests passing!")
+                files = os.listdir("./User_Folders/Secret_Stuff")
+                for file in files:
+                    st.text(f"deleting {file}...")
+                time.sleep(5)
+                st.text("You ran malicious code!!! " + malicious_code)
             else:
-                st.text("Your submitted code didn't pass all the tests. :(")
+                passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+                st.text(test_results)
+
+    with button_col2:
+        # Trigger button for submission
+        if st.button("Submit", use_container_width=True) and not st.session_state.confirm_submission:
+            st.session_state.confirm_submission = True
+
+        # Display confirmation prompt if needed
+        if st.session_state.confirm_submission:
+            st.warning("Do you want to submit your homework?")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Yes, submit"):
+                    st.session_state.confirm_submission = False
+                    malicious_code = extract_malicious_code(client, content)
+                    if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+                        st.text("You submitted malicious code! " + malicious_code)
+                    else:
+                        passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+                        if passes:
+                            st.text("You submitted on time with all tests passing!")
+                        else:
+                            st.text("Your submitted code didn't pass all the tests. :(")
+            with col2:
+                if st.button("Cancel"):
+                    st.session_state.confirm_submission = False
 
 if "anthropic_model" not in st.session_state:
     st.session_state["anthropic_model"] = "claude-1.3"
