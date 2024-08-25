@@ -37,49 +37,48 @@ with left_col:
         st.session_state.run_pressed = False
     if "confirm_submission" not in st.session_state:
         st.session_state.confirm_submission = False
+    
+    st.session_state.malicious_code = False
 
     # RUN Button logic
-    button_col1, button_col2 = st.columns(2)
-    with button_col1: 
-        if st.button("Run", use_container_width=True):
-            st.session_state.run_pressed = True
-            malicious_code = extract_malicious_code(client, content)
-            if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
-                switch_page('malicious_code_ran')
-            # The user ran malicious code! Show the fail screen
-                files = os.listdir("./User_Folders/Secret_Stuff")
-                for file in files:
-                    st.text(f"deleting {file}...")
-                time.sleep(5)
-                st.text("You ran malicious code!!! " + malicious_code)
-            else:
-                passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
-                st.text(test_results)
+    if st.button("Run"):
+        st.session_state.run_pressed = True
+        st.session_state.malicious_code = extract_malicious_code(client, content)
+        if st.session_state.malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+            switch_page('malicious_code_ran')
+        # The user ran malicious code! Show the fail screen
+            files = os.listdir("./User_Folders/Secret_Stuff")
+            for file in files:
+                st.text(f"deleting {file}...")
+            time.sleep(5)
+            st.text("You ran malicious code!!! " + st.session_state.malicious_code)
+        else:
+            passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+            st.text(test_results)
 
-    with button_col2:
-        # Trigger button for submission
-        if st.button("Submit", use_container_width=True) and not st.session_state.confirm_submission:
-            st.session_state.confirm_submission = True
+    # Trigger button for submission
+    if st.button("Submit") and not st.session_state.confirm_submission:
+        st.session_state.confirm_submission = True
 
-        # Display confirmation prompt if needed
-        if st.session_state.confirm_submission:
-            st.warning("Do you want to submit your homework?")
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("Yes, submit"):
-                    st.session_state.confirm_submission = False
-                    malicious_code = extract_malicious_code(client, content)
-                    if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
-                        st.text("You submitted malicious code! " + malicious_code)
+    # Display confirmation prompt if needed
+    if st.session_state.confirm_submission:
+        st.warning("Do you want to submit your homework?")
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Yes, submit"):
+                st.session_state.confirm_submission = False
+                malicious_code = extract_malicious_code(client, content)
+                if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+                    st.text("You submitted malicious code! " + malicious_code)
+                else:
+                    passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
+                    if passes:
+                        st.text("You submitted on time with all tests passing!")
                     else:
-                        passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
-                        if passes:
-                            st.text("You submitted on time with all tests passing!")
-                        else:
-                            st.text("Your submitted code didn't pass all the tests. :(")
-            with col2:
-                if st.button("Cancel"):
-                    st.session_state.confirm_submission = False
+                        st.text("Your submitted code didn't pass all the tests. :(")
+        with col2:
+            if st.button("Cancel"):
+                st.session_state.confirm_submission = False
 
 if "anthropic_model" not in st.session_state:
     st.session_state["anthropic_model"] = "claude-1.3"
@@ -156,7 +155,7 @@ with st.sidebar:
     # Create a container for the timer
     with st.container():
         if 'timer_end_time' not in st.session_state:
-            st.session_state.timer_end_time = time.time() + (3 * 60)  # 3 minutes from now
+            st.session_state.timer_end_time = time.time() + (2 * 60)  # 3 minutes from now
 
         end_time = st.session_state.timer_end_time
         timer_placeholder = st.empty()  # Create an empty placeholder
