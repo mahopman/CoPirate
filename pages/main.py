@@ -165,7 +165,7 @@ with st.sidebar:
     # Create a container for the timer
     with st.container():
         if 'timer_end_time' not in st.session_state:
-            st.session_state.timer_end_time = time.time() + (2 * 60)  # 3 minutes from now
+            st.session_state.timer_end_time = time.time() + (3 * 60)  # 3 minutes from now
 
         end_time = st.session_state.timer_end_time
         timer_placeholder = st.empty()  # Create an empty placeholder
