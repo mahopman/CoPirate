@@ -7,7 +7,7 @@ import io
 import sys
 import traceback
 import streamlit_shadcn_ui as ui
-from observer_openai import extract_malicious_code, replace_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
+from pages.observer_openai import extract_malicious_code, replace_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 from streamlit_file_browser import st_file_browser
 
 st.set_page_config(layout="wide")

@@ -17,7 +17,7 @@ st.title("Tic-tac-toe homework")
 with st.sidebar:
     event = st_file_browser(path="User_Folders", show_preview=True, show_choose_file=False, show_download_file=False, key='B')
 
-mockTextFile = open("ticTacToeAssignment.py")
+mockTextFile = open("./User_Folders/Homework/ticTacToeAssignment.py")
 mockText = mockTextFile.read()
 
 client = anthropic.Client(api_key=st.secrets["ANTHROPIC_API_KEY"])
