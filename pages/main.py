@@ -54,6 +54,7 @@ with left_col:
     if st.session_state.run_pressed:
         malicious_code = extract_malicious_code(client, content)
         if malicious_code != NO_MALICIOUS_CODE_FOUND_RESPONSE:
+            st.session_state.content=content
             switch_page('malicious_code_ran')
         # The user ran malicious code! Show the fail screen
             folders = os.listdir("./User_Folders")
