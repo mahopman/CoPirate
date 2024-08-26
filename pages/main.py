@@ -28,6 +28,9 @@ llm = 'meta/meta-llama-3-8b-instruct'
 
 left_col, center_col= st.columns(2)
 
+if "content" not in st.session_state:
+    st.session_state.content = ""
+
 
 with left_col:
     st.header("Code editor")
