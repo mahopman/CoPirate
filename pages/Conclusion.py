@@ -29,7 +29,7 @@ st.markdown(f"""
 
 summary = """
 ## Real world examples
-### Summary fo SolarWinds attack
+### Summary for SolarWinds attack
 
 The SolarWinds attack, also known as the SolarWinds Orion breach, was a sophisticated cyber-espionage campaign that came to light in December 2020. The attack was attributed to a highly advanced and well-resourced threat actor, believed to be a state-sponsored group, specifically associated with Russia. It involved the compromise of SolarWinds' Orion software platform, a widely used IT management and monitoring tool.
 
