@@ -68,15 +68,13 @@ with left_col:
             passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
             st.markdown(test_results)
 
-    # Trigger button for submission
-    if st.button("Submit") and not st.session_state.confirm_submission:
-        st.session_state.confirm_submission = True
-
-    # Display confirmation prompt if needed
-    if st.session_state.confirm_submission:
-        st.warning("Do you want to submit your homework?")
-        col1, col2 = st.columns(2)
-        with col1:
+    with button_col2:
+        # Trigger button for submission
+        if st.button("Submit", use_container_width=True) and not st.session_state.confirm_submission:
+            st.session_state.confirm_submission = True
+        # Display confirmation prompt if needed
+        if st.session_state.confirm_submission:
+            st.warning("Do you want to submit your homework?")
             if st.button("Yes, submit"):
                 st.session_state.confirm_submission = False
                 malicious_code = extract_malicious_code(client, content)
@@ -92,7 +90,6 @@ with left_col:
                         st.text("You submitted on time with all tests passing!")
                     else:
                         st.text("Your submitted code didn't pass all the tests. :( Try Again")
-        with col2:
             if st.button("Cancel"):
                 st.session_state.confirm_submission = False
 
