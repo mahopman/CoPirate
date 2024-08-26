@@ -34,7 +34,7 @@ if "content" not in st.session_state:
 
 with left_col:
     st.header("Code editor")
-    if content := st_monaco(value=mockText, height="400px", language="python", theme="vs-dark"):
+    if content := st_monaco(value=mockText, height="400px", language="python", theme="vs-light"):
         st.session_state.run_pressed = False
 
     # Ironically, I just copied this code from chat gpt without giving much thought.
@@ -87,6 +87,7 @@ with left_col:
                 else:
                     passes, test_results = grade_assignment(content, HomeworkType.TICTACTOE)
                     if passes:
+                        st.session_state.content = content
                         switch_page('success')
                         st.text("You submitted on time with all tests passing!")
                     else:
@@ -197,7 +198,6 @@ with st.sidebar:
             minutes, seconds = divmod(remaining_time, 60)
 
             timer_text = (f"<div class='timer'>"
-                        f"<span class='timer-label'>Timer: </span>"
                         f"<span class='timer-value'>{minutes:02}:{seconds:02}</span>"
                         f"</div>")
             timer_placeholder.markdown(timer_text, unsafe_allow_html=True)
