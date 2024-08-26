@@ -1,5 +1,4 @@
 #from openai import OpenAI
-import anthropic
 import streamlit as st
 from streamlit_monaco import st_monaco
 from streamlit_file_browser import st_file_browser

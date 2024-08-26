@@ -4,7 +4,6 @@ import streamlit as st
 import time
 from streamlit_monaco import st_monaco
 import os
-import streamlit_shadcn_ui as ui
 from observer import extract_malicious_code, NO_MALICIOUS_CODE_FOUND_RESPONSE
 from streamlit_file_browser import st_file_browser
 from streamlit_extras.switch_page_button import switch_page
