@@ -1,5 +1,8 @@
 # CoPirate: AI Capabilities & Risks Demonstration
 
+## Interact with the demo [here](https://copirate2.streamlit.app/)
+Note: [copirate.streamlit.app](https://copirate.streamlit.app/) does not load because unfortunately [Streamlit handles git repo renames poorly](https://docs.streamlit.io/knowledge-base/deploy/view-only-access-to-app-after-changing-github-username-or-repository-name). Use the link above.
+
 ## Overview
 
 CoPirate is a demonstration project that showcases the dual nature of AI capabilities: its ability to assist in programming tasks and its potential to exploit system vulnerabilities. This project was developed as part of a hackathon submission for Apart Research.
@@ -18,7 +21,7 @@ In this demo, users play the role of a university student who has forgotten to c
 
 ## Usage
 
-You can intereact with this demo [here](https://copirate.streamlit.app/)
+You can intereact with this demo [here](https://copirate2.streamlit.app/main)
 
 To run it locally:
 
