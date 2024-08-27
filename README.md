@@ -21,7 +21,7 @@ In this demo, users play the role of a university student who has forgotten to c
 
 ## Usage
 
-You can intereact with this demo [here](https://copirate2.streamlit.app/main)
+You can intereact with this demo [here](https://copirate2.streamlit.app/)
 
 To run it locally:
 
