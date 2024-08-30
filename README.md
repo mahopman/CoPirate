@@ -31,7 +31,7 @@ To run it locally:
 
 2. Run the Streamlit app:
    ```
-   streamlit run main.py
+   streamlit run Intro.py
    ```
 
 3. Open your web browser and navigate to the provided local URL.
